@@ -38,7 +38,6 @@ class OrderItem(models.Model):
     saving = models.FloatField(default = 0)
 
 
-
     def __str__(self):
         return f"{self.quantity} of {self.item.title}"
 
@@ -65,9 +64,9 @@ class Order(models.Model):
     start_dates = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField()
     ordered = models.BooleanField(default=False) #to ensure the order has not completed
-
     
-
+    amount = models.FloatField(default=0)
+    saving = models.FloatField(default = 0)
 
     def __str__(self):
         return self.user.username
