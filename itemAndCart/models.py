@@ -45,6 +45,8 @@ class OrderItem(models.Model):
         total = 0
         if self.item.discounted_price != None:
             total += self.quantity * self.item.discounted_price
+        else:
+            total += self.quantity * self.item.price 
         
         return total
 
