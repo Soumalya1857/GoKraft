@@ -16,10 +16,7 @@ from itemAndCart.api.serializers import (
 @api_view(['GET',])
 def api_get_item_details(request, slug):
     try:
-        item = Item.objects.get(slug = slug)
-    except Item.doesNotExist:
-        return Response(status = status.HTTP_404_NOT_FOUND)
-    
+        item = Item.objects.get(slug = slug) 
     if request.method == 'GET':
         serializer = ItemSerializer(item)
         return Response(serializer.data)
@@ -28,13 +25,10 @@ def api_get_item_details(request, slug):
 @api_view(['PUT',])
 def api_update_item_details(request, slug):
     data = {}
-    try:
-        item_object = Item.objects.get(slug = slug)
-        temp = request.data['title']
-        temp = temp.replace(' ','-')
-        item_object.slug = temp
-    except Item.doesNotExist:
-        return Response(status = status.HTTP_404_NOT_FOUND)
+    item_object = Item.objects.get(slug = slug)
+    temp = request.data['title']
+    temp = temp.replace(' ','-')
+    item_object.slug = temp
     
 
     if item_object.seller != request.user:

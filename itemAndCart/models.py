@@ -51,13 +51,6 @@ class OrderItem(models.Model):
         return total
 
 
-    def get_saving(self):
-        save = 0
-        if self.item.discounted_price != None:
-            save += (self.item.price - self.item.discounted_price)* self.quantity
-        
-        return save
-
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
     #user_id = user.pk
