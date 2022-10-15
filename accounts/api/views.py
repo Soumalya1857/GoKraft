@@ -12,7 +12,10 @@ from accounts.models import Account
 
 def validate_email(email):
 	account = None
-	account = Account.objects.get(email=email)
+	try:
+	    account = Account.objects.get(email=email)
+	except Account.DoesNotExist:
+	    return None
 	if account != None:
 		return email
 
@@ -50,7 +53,7 @@ def registration_view(request):
 			data['email'] = account.email
 			token = Token.objects.get(user = account).key
 			data['Token'] = token
-		
+
 		else:
 			data = serializer.errors
 		return Response(data)
