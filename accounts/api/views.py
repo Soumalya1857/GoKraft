@@ -21,7 +21,10 @@ def validate_email(email):
 
 def validate_username(username):
 	account = None
-	account = Account.objects.get(username=username)
+	try:
+	    account = Account.objects.get(username=username)
+	except Account.DoesNotExist:
+    	    return None
 	if account != None:
 		return username
 
