@@ -16,7 +16,9 @@ from itemAndCart.api.serializers import (
 @api_view(['GET',])
 def api_get_item_details(request, slug):
     try:
-        item = Item.objects.get(slug = slug) 
+        item = Item.objects.get(slug = slug)
+    except Item.doesNotExist:
+        return None
     if request.method == 'GET':
         serializer = ItemSerializer(item)
         return Response(serializer.data)
@@ -29,14 +31,14 @@ def api_update_item_details(request, slug):
     temp = request.data['title']
     temp = temp.replace(' ','-')
     item_object.slug = temp
-    
+
 
     if item_object.seller != request.user:
         data['faliure'] = 'User is not the seller of this item'
         return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == 'PUT':
-        
+
         serializer = ItemSerializer(item_object, data = request.data)
         if serializer.is_valid():
             serializer.save()
@@ -60,8 +62,8 @@ def api_delete_item_details(request, slug):
     if item_object.seller != request.user:
         data['faliure'] = 'User is not the seller of this item'
         return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
-    
-    if request.method == 'DELETE':  
+
+    if request.method == 'DELETE':
         opetation = item_object.delete()
         if opetation:
             data["success"] = "Delete successful"
@@ -75,7 +77,7 @@ def api_delete_item_details(request, slug):
 
 @api_view(['POST',])
 def api_create_item_details(request):
-    
+
     temp = request.data['title']
     temp = temp.replace(' ','-')
     item_object = Item(slug = temp)
@@ -103,7 +105,7 @@ def api_add_to_cart(request, slug):
 
     if item == None:
         return Response(status= status.HTTP_400_BAD_REQUEST)
-    
+
     data = {}
     if int(request.data['quantity']) < 0:
         data['faliure'] = 'Item number cannot be less than zero'
@@ -173,7 +175,7 @@ def api_add_to_cart(request, slug):
     data['quantity'] = order_item.__str__()
     data['total cart price'] = order.amount
     data['total saving'] = order.saving
-    
+
 
     return Response(data = data, status = status.HTTP_200_OK)
 
@@ -210,5 +212,5 @@ def api_remove_from_cart(request, slug):
 
 
 
-    
+
 
